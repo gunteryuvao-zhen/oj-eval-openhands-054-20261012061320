@@ -362,7 +362,7 @@ Frac parseFactor(const string& expr, int l, int r) {
     
     if (l > r) return Frac(0);
     
-    // Handle parentheses
+    // Handle parentheses - only if entire expression is enclosed
     if (expr[l] == '(') {
         int balance = 1;
         int pos = l + 1;
@@ -371,8 +371,9 @@ Frac parseFactor(const string& expr, int l, int r) {
             else if (expr[pos] == ')') balance--;
             pos++;
         }
-        if (balance == 0) {
-            return parseExpression(expr, l + 1, pos - 2);
+        if (balance == 0 && pos == r + 1) {
+            // Entire expression is enclosed in parentheses
+            return parseExpression(expr, l + 1, r - 1);
         }
     }
     
@@ -441,7 +442,7 @@ Frac parseExpression(const string& expr, int l, int r) {
     
     if (l > r) return Frac(0);
     
-    // Handle parentheses
+    // Handle parentheses - only if entire expression is enclosed
     if (expr[l] == '(') {
         int balance = 1;
         int pos = l + 1;
@@ -450,7 +451,8 @@ Frac parseExpression(const string& expr, int l, int r) {
             else if (expr[pos] == ')') balance--;
             pos++;
         }
-        if (balance == 0 && pos > r) {
+        if (balance == 0 && pos == r + 1) {
+            // Entire expression is enclosed in parentheses
             return parseExpression(expr, l + 1, r - 1);
         }
     }
